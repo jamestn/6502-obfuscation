@@ -1,11 +1,11 @@
 # 6502 Obfuscation
 
 ## Intro
-This document looks at techniques for obfucating 6502 machine code.
+This document looks at techniques for obfuscating 6502 machine code.
 
 ## Aims of obfuscation
 
-* Hinder disassembly of the machine code (i.e. conversion into assembley code)
+* Hinder disassembly of the machine code (i.e. conversion into assembly code)
 * Make disassembled code harder to follow and reason about
 
 ## Why do people obfuscate?
@@ -29,16 +29,20 @@ Obfuscation is only obfuscation. You’re only making it harder, but not impossi
 
 ## Obfuscation Techniques
 
-### Non-desctructive padding
+### Non-destructive padding
 
 Pad legitimate code with non-destructive operations that make it look like a data section. e.g. several CLCs in a row, NOPs, etc. This code still executes a useful function but wastes memory/cycles on doing nothing of use, in the hope a viewer will dismiss it as "not real code".
+
+### Undocumented opcodes
+
+Various platform understand undocumented opcodes that are not officially part of the 6502 instruction set. These can be used in code targeting certain a platform in order to mis-align the disassembler or make code look like junk or data.
 
 ### Code that is never reached
 
 Code can be included that is 'fake', i.e. it is never executed (and never needs to be). In order to draw attention to the fake code, you can execute some code self-modification on the fake code in order to make it look like it's relevant and will later be called.
 
 ### Disassembler mis-alignment
-You can wrong-foot mis-align the disassembler by interrupting flow of opcodes with e.g. ascii or nonsense byte(s). These memory locations are never actually reached during execution so won't cause an execution problem.
+You can mis-align the disassembler by interrupting flow of opcodes with e.g. ascii or nonsense byte(s). These memory locations are never actually reached during execution so won't cause an execution problem.
 
 For example, after an RTS you might place a single byte $69. The location after the $69 is the true start of the next routine. The disassembler recognises $69 as ADC immediate mode, and expects a byte to follow as the parameter. Thus the disassembler is mis-aligned from this point, and outputs nonsense.
 
@@ -62,7 +66,7 @@ Alternatively, entire sections of machine code can be scrambled. Once the machin
 
 #### Modifying code sections just before use
 
-To go a step further, certain sections of code can be descrambled just before they are excuted, then scrambled again. This would prevent someone doing a memory dump of an emulator once the code is running (which they'd do in an  attempt to see the machine code once it's all unscrambled).
+To go a step further, certain sections of code can be descrambled just before they are executed, then scrambled again. This would prevent someone doing a memory dump of an emulator once the code is running (which they'd do in an  attempt to see the machine code once it's all unscrambled).
 
 #### Modifying code sections - recursively
 
@@ -76,7 +80,7 @@ There are 6502 optimisation techniques that can make code looks slightly odd, e.
 
 ### Scrambling parameters: external source
 
-Iinstead of hardcoding scrambling parameters into the machine code, derive them from a (definitely known!) external memory location in the target system, e.g. BBC micro. If the contents depend on the current context (e.g. we’re in MODE2), even better.
+Instead of hardcoding scrambling parameters into the machine code, derive them from a (definitely known!) external memory location in the target system, e.g. BBC micro. If the contents depend on the current context (e.g. we’re in MODE2), even better.
 
 You have to be sure that the immutability of the data you're using is certain!
 
@@ -91,12 +95,6 @@ In order to align JSRs where you want them, you can use a NOP or other pointless
 
 So, for example, offset JMPs and JSRs using a routine that has summed all the bytes of the code and stored it somewhere. Any attempt to modify the code will break things.
 
-## Examples strategy combining the above tricks
+## Example strategy combining the above tricks
 
-Todo
-
-
-
-
-
-
+(Todo)
