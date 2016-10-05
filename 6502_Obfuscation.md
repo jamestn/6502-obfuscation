@@ -35,7 +35,10 @@ Pad legitimate code with non-destructive operations that make it look like a dat
 
 ### Undocumented opcodes
 
-Various platform understand undocumented opcodes that are not officially part of the 6502 instruction set. These can be used in code targeting certain a platform in order to mis-align the disassembler or make code look like junk or data.
+The NMOS 6502 used in most older 6502 systems has several opcodes that aren't documented but do something anyway.
+They either act as a NOP, read a byte and ignore it, mix the effects of two opcodes, or lock up the processor.
+Some undocumented opcodes, like LAX, which loads a number to both A and X, can come in handy, but keep in mind that later 6502 processors fill up these empty opcode spaces with other opcodes or NOPS.
+The KIL opcodes lock up the processor, making it stop fetching opcodes and responding to interrupts.
 
 ### Code that is never reached
 
